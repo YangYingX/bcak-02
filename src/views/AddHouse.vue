@@ -102,6 +102,6 @@ export default {
 <style>
 .inputs{
 	display: grid;
-	gird
+	gird-
 }
 </style>
