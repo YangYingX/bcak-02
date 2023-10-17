@@ -23,3 +23,19 @@ export const PostHouseUtil = (data) => {
 
 	})
 }
+export const DelHouseUtil = (params) => {
+	return axios.request({
+		url: 'house/delunitList',
+		method: 'get',
+		params,
+
+	})
+}
+export const ShowHouseUtil = (params) => {
+	return axios.request({
+		url: 'house/getDetailId',
+		method: 'get',
+		params,
+
+	})
+}

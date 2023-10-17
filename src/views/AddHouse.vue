@@ -1,25 +1,33 @@
 <template>
-  <div>
+  <div class="main">
     <div>
       <el-form :inline="true"
                :model="selectform"
                class="demo-form-inline">
-        <div class="inputs"><el-form-item label="小区名称">
+        <div class="inputs"><el-form-item label="小区名称"
+                        label-width="100px">
             <el-input v-model="selectform.communityname"
-                      placeholder="小区名称"></el-input>
+                      placeholder="小区名称"
+                      minlength="500px"></el-input>
           </el-form-item>
-          <el-form-item label="单元名称">
+          <el-form-item label="单元名称"
+                        label-width="100px">
             <el-input v-model="selectform.unitname"
-                      placeholder="单元名称"></el-input>
+                      placeholder="单元名称"
+                      minlength="500px"></el-input>
           </el-form-item>
-          <el-form-item label="栋数">
+          <el-form-item label="  栋数 "
+                        label-width="100px">
             <el-input v-model="selectform.unitnum"
-                      placeholder="栋数"></el-input>
+                      placeholder="栋数"
+                      minlength="500px"></el-input>
           </el-form-item>
 
-          <el-form-item label="建成状态">
+          <el-form-item label="建成状态"
+                        label-width="100px">
             <el-select v-model="selectform.unitstatus"
-                       placeholder="建成状态">
+                       placeholder="建成状态"
+                       minlength="500px">
               <el-option label="已建成"
                          value="1"></el-option>
               <el-option label="未建成"
@@ -29,6 +37,8 @@
         </div>
         <el-button type="success"
                    @click="Submit"><i class="el-icon-plus"></i>录入</el-button>
+        <el-button type="primary"
+                   @click="back">返回</el-button>
 
       </el-form>
     </div>
@@ -94,14 +104,20 @@ export default {
         type: 'success'
       });
       this.$router.push('/house/unit')
+    }, back () {
+      this.$router.push('/house/unit')
     }
   }
 }
 </script>
 
 <style>
-.inputs{
-	display: grid;
-	gird-
+.inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.main {
+  margin: 20px;
+  padding: 20px;
 }
 </style>

@@ -68,8 +68,14 @@
             {{ scope.row.unitstatus==1?'已建成':'未建成' }}
           </template>
         </el-table-column>
-        <el-table-column prop="unitnum"
-                         label="操作">
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini"
+                       @click="show(scope.row)">查看</el-button>
+            <el-button size="mini"
+                       type="danger"
+                       @click="Delete(scope.row)">归档</el-button>
+          </template>
         </el-table-column>
       </el-table></div>
     <div class="page"><el-pagination @size-change="changesize"
@@ -83,7 +89,7 @@
 </template>
 
 <script>
-import { GetHouseUtil, SearchHouseUtil } from '../api/home'
+import { GetHouseUtil, SearchHouseUtil, DelHouseUtil } from '../api/home'
 var dayjs = require('dayjs')
 export default {
   data () {
@@ -152,6 +158,33 @@ export default {
         currPage: 1,
         token: sessionStorage.getItem('token')
       }
+    },
+    Delete (row) {
+      console.log(row.id);
+      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        let res = await DelHouseUtil({ id: row.id, token: sessionStorage.getItem('token') })
+        console.log(res);
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+
+        });
+        this.submit()
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+
+    },
+    show (row) {
+      this.$router.push(`/house/show/${row.id}`)
     }
   }
 }
