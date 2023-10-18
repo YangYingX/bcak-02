@@ -5,31 +5,30 @@
                :model="selectform"
                class="demo-form-inline">
         <el-form-item>
-          <el-input v-model="selectform.communityname"
-                    placeholder="小区名称"></el-input>
+          <el-select v-model="selectform.homestatus"
+                     placeholder="入住状态">
+            <el-option label="入住"
+                       value="1"></el-option>
+            <el-option label="未入住"
+                       value="2"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-input v-model="selectform.unitname"
                     placeholder="单元名称"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-col :span="11">
-            <el-date-picker type="date"
-                            placeholder="选择日期"
-                            v-model="selectform.createDt"
-                            value-format="yyyy-MM-dd"
-                            :picker-options="pickerOptions0"></el-date-picker>
-          </el-col>
+          <el-input v-model="selectform.buildnum"
+                    placeholder="幢号"></el-input>
         </el-form-item>
 
         <el-form-item>
-          <el-select v-model="selectform.value"
-                     placeholder="建成状态">
-            <el-option label="已建成"
-                       value="1"></el-option>
-            <el-option label="未建成"
-                       value="2"></el-option>
-          </el-select>
+          <el-input v-model="selectform.homenum"
+                    placeholder="房号"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input v-model="selectform.homename"
+                    placeholder="住客姓名"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary"
@@ -45,36 +44,58 @@
     <div> <el-table :data="tableData"
                 stripe
                 style="width: 100%">
-        <el-table-column prop="communityname"
-                         label="小区名称"
-                         width="180">
+        <el-table-column type="selection"
+                         width="55">
+        </el-table-column>
+        <el-table-column type="index"
+                         label="序号"
+                         width="50">
         </el-table-column>
         <el-table-column prop="unitname"
                          label="单元名称"
                          width="180">
-        </el-table-column>
-        <el-table-column prop="unitnum"
-                         label="栋数">
-        </el-table-column>
-        <el-table-column prop="createtime"
-                         label="建成时间">
           <template scope="scope">
-            {{ dayjs(scope.row.createtime) }}
+            {{ scope.row.unitname||'暂无' }}
           </template>
         </el-table-column>
-        <el-table-column prop="unitstatus"
+        <el-table-column prop="buildnum"
+                         label="幢号"
+                         width="180">
+          <template scope="scope">
+            {{ scope.row.buildnum||'暂无' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="storeynum"
+                         label="楼层号">
+          <template scope="scope">
+            {{ scope.row.storeynum||'暂无' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="homenum"
+                         label="房号">
+          <template scope="scope">
+            {{ scope.row.homenum||'暂无' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="homename"
+                         label="住客姓名">
+          <template scope="scope">
+            {{ scope.row.homename||'暂无' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="homestatus"
                          label="状态">
           <template scope="scope">
-            {{ scope.row.unitstatus==1?'已建成':'未建成' }}
+            {{ scope.row.homestatus==1?'已入住':'未入住' }}
           </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini"
-                       @click="show(scope.row)">查看</el-button>
+                       @click="show(scope.row)">编辑</el-button>
             <el-button size="mini"
                        type="danger"
-                       @click="Delete(scope.row)">归档</el-button>
+                       @click="Delete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table></div>
@@ -89,7 +110,7 @@
 </template>
 
 <script>
-import { GetHouseUtil, SearchHouseUtil, DelHouseUtil } from '../api/home'
+import { GetHouseUtil, GetHouseNum, DelHouseUtil } from '../api/home'
 var dayjs = require('dayjs')
 export default {
   data () {
@@ -102,12 +123,13 @@ export default {
       },
       pagetotal: 0,
       selectform: {
-        communityname: '',
+        homestatus: 1,
         unitname: '',
-        createDt: '',
-        value: '',
+        buildnum: '',
+        homenum: '',
+        homename: '',
+        currPage: 0,
         pageNum: 10,
-        currPage: 1,
         token: sessionStorage.getItem('token')
       },
       pickerOptions0: {
@@ -131,8 +153,7 @@ export default {
       return dayjs(e).format('YYYY-MM-DD HH mm:ss')
     },
     async submit () {
-      let res = await SearchHouseUtil(this.selectform)
-
+      let res = await GetHouseNum(this.selectform)
       this.tableData = res.data
       this.pagetotal = res.total
 
@@ -150,12 +171,13 @@ export default {
     },
     reset () {
       this.selectform = {
-        communityname: '',
+        homestatus: '',
         unitname: '',
-        createDt: '',
-        value: '',
+        buildnum: '',
+        homenum: '',
+        homename: '',
+        currPage: 0,
         pageNum: 10,
-        currPage: 1,
         token: sessionStorage.getItem('token')
       }
     },

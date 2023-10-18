@@ -52,7 +52,7 @@ export default {
   methods: {
     postuser () {
       Postuser(this.form).then((result) => {
-        console.log(result, 1);
+
         sessionStorage.setItem('token', result.jwt_token)
         this.$router.push('/')
       }).catch(() => {

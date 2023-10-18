@@ -32,11 +32,13 @@
         </el-form-item>
       </el-form>
     </el-card>
-		<div>
-			<el-button type="primary">编辑</el-button>
-			<el-button type="primary">返回</el-button>
-		</div>
-		</div>
+    <div>
+      <el-button type="primary"
+                 @click="edithouse">编辑</el-button>
+      <el-button type="primary"
+                 @click="back">返回</el-button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -49,11 +51,17 @@ export default {
   },
   mounted () {
     ShowHouseUtil({ id: this.$route.params.id, token: sessionStorage.getItem('token') }).then((result) => {
-      console.log(result);
+
       this.untlmsg = result[0]
     }).catch((err) => {
 
     });
+  }, methods: {
+    edithouse () {
+      this.$router.push(`/house/unit/add/${this.$route.params.id}`)
+    }, back () {
+      this.$router.push('/house/unit')
+    }
   }
 }
 </script>

@@ -39,3 +39,19 @@ export const ShowHouseUtil = (params) => {
 
 	})
 }
+export const EditHouseUtil = (data) => {
+	return axios.request({
+		url: 'house/updateunitList',
+		method: 'post',
+		data,
+
+	})
+}
+export const GetHouseNum = (params) => {
+	return axios.request({
+		url: 'house/searchnumList',
+		method: 'get',
+		params,
+
+	})
+}

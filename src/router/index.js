@@ -24,10 +24,19 @@ const routes = [
         path: '/house/unit/add',
         name: 'houseunitadd',
         component: () => import('../views/AddHouse.vue')
+      },
+      {
+        path: '/house/unit/add/:id',
+        name: 'houseunitadd',
+        component: () => import('../views/AddHouse.vue')
       }, {
         path: '/house/show/:id',
         name: 'houseshow',
         component: () => import('../views/ShowHouse.vue')
+      }, {
+        path: '/house/number',
+        name: 'housesnum',
+        component: () => import('../views/HouseNum.vue')
       }
     ]
   },

@@ -35,12 +35,14 @@
             </el-select>
           </el-form-item>
         </div>
+
+      </el-form>
+      <div class="rightsitck">
         <el-button type="success"
                    @click="Submit"><i class="el-icon-plus"></i>录入</el-button>
         <el-button type="primary"
                    @click="back">返回</el-button>
-
-      </el-form>
+      </div>
     </div>
     <div>
       <Editor id="tinymce"
@@ -53,7 +55,7 @@
 <script>
 import tinymce from "tinymce";
 import Editor from "@tinymce/tinymce-vue"; import 'tinymce/themes/silver/theme';
-import { PostHouseUtil } from '../api/home'
+import { PostHouseUtil, ShowHouseUtil, EditHouseUtil } from '../api/home'
 export default {
   components: { Editor },
   data () {
@@ -81,6 +83,7 @@ export default {
         user: '',
         region: ''
       },
+      u_id: 0,
       selectform: {
         communityname: "",
         unitname: "",
@@ -88,23 +91,60 @@ export default {
         unitstatus: '',
         unitcontext: "",
         token: sessionStorage.getItem('token')
-
       },
     };
 
   }, mounted () {
     tinymce.init({});
+    if (this.$route.params.id) {
+      ShowHouseUtil({ id: this.$route.params.id, token: sessionStorage.getItem('token') }).then((result) => {
+
+        let { communityname, unitname, unitnum, unitstatus, unitcontext } = result[0]
+        this.selectform.communityname = communityname
+        this.selectform.unitname = unitname
+        this.selectform.unitnum = unitnum
+        this.selectform.unitstatus = unitstatus
+        this.selectform.unitcontext = unitcontext
+      }).catch((err) => {
+
+      });
+    }
   },
   methods: {
-    async Submit () {
-      let res = await PostHouseUtil(this.selectform)
-      console.log(res);
-      this.$message({
-        message: '添加成功',
-        type: 'success'
+    Submit () {
+      this.$confirm('是否要提交信息?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+
+        if (this.$route.params.id) {
+          let res = await EditHouseUtil({ u_id: this.$route.params.id, ...this.selectform })
+
+          this.$message({
+            type: 'success',
+            message: '修改成功!'
+          });
+          this.$router.push('/house/unit')
+        } else {
+          let res = await PostHouseUtil(this.selectform)
+
+          this.$message({
+            message: '提交成功',
+            type: 'success'
+          });
+          this.$router.push('/house/unit')
+        }
+
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
       });
-      this.$router.push('/house/unit')
-    }, back () {
+    },
+    back () {
       this.$router.push('/house/unit')
     }
   }
@@ -119,5 +159,13 @@ export default {
 .main {
   margin: 20px;
   padding: 20px;
+}
+.rightsitck {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  z-index: 100;
+  right: 0;
+  top: 45%;
 }
 </style>

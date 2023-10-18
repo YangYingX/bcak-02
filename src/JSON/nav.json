@@ -14,13 +14,13 @@
 			{
 				"id": "2-2",
 				"title": "房号管理",
-				"_key": "/house/404",
+				"_key": "/house/number",
 				"prentID": "2"
 			},
 			{
 				"id": "2-3",
 				"title": "房屋设备信息",
-				"_key": "/house/404",
+				"_key": "/house/msg",
 				"prentID": "2"
 			}
 		]

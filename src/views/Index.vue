@@ -377,7 +377,7 @@ export default {
       GetCostData({ c_id: 11, currPage: 0, pageNum: 4 }),
       GetCostData({ c_id: 12, currPage: 0, pageNum: 4 }),
     ]).then(results => {
-      console.log(results);
+
 
       results.forEach((result, index) => {
         this.radaroption.series[0].data[0].value.push(result.total)
@@ -386,7 +386,7 @@ export default {
       })
     })
     GetLoginMonth().then((result) => {
-      console.log(result);
+
       let num = []
       let days = []
       let now = dayjs().format('YYYY-MM-')
@@ -426,7 +426,7 @@ export default {
     },
     async getrepairdata () {
       let res = await GetRepairData(this.tableparams)
-      console.log(res);
+   
       this.tableData = res.data
     }
   }
