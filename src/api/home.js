@@ -77,3 +77,19 @@ export const GetUserList = (params) => {
 
 	})
 }
+export const SearchdeviceList = (params) => {
+	return axios.request({
+		url: 'house/searchdeviceList',
+		method: 'get',
+		params,
+
+	})
+}
+export const ChangeSmart = (data) => {
+	return axios.request({
+		url: 'house/updatesmartStatus',
+		method: 'post',
+		data,
+	})
+}
+

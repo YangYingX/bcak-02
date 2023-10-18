@@ -397,7 +397,8 @@ export default {
       }).catch((err) => {
 
       });
-    }
+    },
+    
 
   }
 

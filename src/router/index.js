@@ -47,6 +47,11 @@ const routes = [
         path: '/house/msg',
         name: 'housemsg',
         component: () => import('../views/HouseMsg.vue')
+      },
+      {
+        path: '/parking/parkMessage',
+        name: 'housemsg',
+        component: () => import('../views/ParkMsg.vue')
       }
     ]
   },
