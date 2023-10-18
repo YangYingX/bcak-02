@@ -62,3 +62,18 @@ export const DelHouses = (params) => {
 
 	})
 }
+export const UpdataHouses = (data) => {
+	return axios.request({
+		url: `house/updatenumList`,
+		method: 'post',
+		data
+	})
+}
+export const GetUserList = (params) => {
+	return axios.request({
+		url: 'users/getUserList',
+		method: 'get',
+		params,
+
+	})
+}

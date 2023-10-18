@@ -162,7 +162,7 @@ export default {
 }
 .rightsitck {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   position: fixed;
   z-index: 100;
   right: 0;
