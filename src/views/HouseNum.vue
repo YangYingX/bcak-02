@@ -38,6 +38,8 @@
                    @click="disposetable"><i class="el-icon-plus"></i>导出</el-button>
         <el-button type="primary"
                    @click="reset"><i class="el-icon-refresh-right"></i>重置</el-button>
+        <el-button type="danger"
+                   @click="delall"><i class="el-icon-delete-solid"></i>批量删除</el-button>
 
       </el-form>
     </div>
@@ -94,7 +96,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button size="mini"
-                       @click="show(scope.row)">编辑</el-button>
+                       @click="editnum(scope.row)">编辑</el-button>
             <el-button size="mini"
                        type="danger"
                        @click="Delete(scope.row)">删除</el-button>
@@ -112,7 +114,7 @@
 </template>
 
 <script>
-import { GetHouseUtil, GetHouseNum, DelHouseUtil } from '../api/home'
+import { GetHouseUtil, GetHouseNum, DelHouseUtil, DelHouses } from '../api/home'
 import XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 var dayjs = require('dayjs')
@@ -132,7 +134,7 @@ export default {
       selectform: {
         homestatus: '',
         unitname: '',
-        c: '',
+        buildnum: '',
         homenum: '',
         homename: '',
         currPage: 0,
@@ -163,7 +165,7 @@ export default {
 
     },
     changepage (e) {
-      this.selectform.currPage = e
+      this.selectform.currPage = e - 1
       this.submit()
     },
     changesize (e) {
@@ -209,8 +211,8 @@ export default {
       });
 
     },
-    show (row) {
-      this.$router.push(`/house/show/${row.id}`)
+    editnum (row) {
+      this.$router.push(`/house/editnum/${row.id}`)
     },
     disposetable () {
       let res = this.pretabledata.map((item, index) => {
@@ -255,6 +257,36 @@ export default {
     }, select (e) {
       console.log(e);
       this.pretabledata = e
+    },
+    delall () {
+      let res = this.pretabledata.map(item => item.id)
+      console.log(res);
+      let a = ''
+      for (let item of res) {
+        a += `ids[]=${item}&`
+      }
+      a += 'token='
+      a += sessionStorage.getItem('token')
+      console.log(a);
+      this.$confirm('此操作将永久删除数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        DelHouses(a).then((result) => {
+          console.log(result);
+          this.submit()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     }
 
   }

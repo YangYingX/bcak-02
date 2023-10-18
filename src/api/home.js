@@ -55,3 +55,10 @@ export const GetHouseNum = (params) => {
 
 	})
 }
+export const DelHouses = (params) => {
+	return axios.request({
+		url: `house/delnumList?${params}`,
+		method: 'get',
+
+	})
+}
