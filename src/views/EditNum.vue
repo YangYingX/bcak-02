@@ -153,9 +153,8 @@
       </div>
     </el-form>
     <div>
-      <el-dialog title="提示"
-                 :visible.sync="dialogVisible"
-                 width="60%"
+      <el-dialog :visible.sync="dialogVisible"
+                 width="95%"
                  :before-close="handleClose">
         <div>
           <el-radio-group v-model="selectedOption">
@@ -174,53 +173,86 @@
 
           <div v-if="selectedOption === 'option2'">
             <!-- 选项2对应的页面内容 -->
-
-            <!-- <el-table :id="'mytable'"
-                      :data="tableData"
+            <span class="tittle">住客姓名</span>
+            <el-table :data="UsersData"
                       stripe
-                      style="width: 100%"
-                      @selection-change="select">
+                      style="width: 100%">
 
-              <el-table-column prop="unitname"
-                               label="单元名称"
-                               width="180">
-                <template scope="scope">
-                  {{ scope.row.unitname||'暂无' }}
-                </template>
+              <el-table-column prop="id"
+                               label="ID">
+
               </el-table-column>
-              <el-table-column prop="buildnum"
-                               label="幢号"
-                               width="180">
-                <template scope="scope">
-                  {{ scope.row.buildnum||'暂无' }}
-                </template>
+              <el-table-column prop="username"
+                               label="用户账号">
+
               </el-table-column>
-              <el-table-column prop="storeynum"
-                               label="楼层号">
-                <template scope="scope">
-                  {{ scope.row.storeynum||'暂无' }}
-                </template>
+              <el-table-column prop="homeaddress"
+                               label="家庭住址"
+                               width="300px">
+
               </el-table-column>
-              <el-table-column prop="homenum"
-                               label="房号">
+              <el-table-column prop="type"
+                               label="类型">
                 <template scope="scope">
-                  {{ scope.row.homenum||'暂无' }}
+                  {{ scope.row.type==1?'管理员':'普通用户'}}
                 </template>
               </el-table-column>
 
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button size="mini"
-                             @click="editnum(scope.row)">编辑</el-button>
-                  <el-button size="mini"
-                             type="danger"
-                             @click="Delete(scope.row)">删除</el-button>
+
+                  <i class="el-icon-circle-plus"
+                     @click="Add(scope.row)">添加</i>
                 </template>
               </el-table-column>
-            </el-table> -->
+            </el-table>
+            <div class="block">
 
+              <el-pagination @size-change="handleSizeChange"
+                             @current-change="handleCurrentChange"
+                             :page-sizes="[7, 10, 20, 30]"
+                             :page-size="this.Userlist.pageNum"
+                             layout="total, sizes, prev, pager, next"
+                             :total="this.userstotal">
+              </el-pagination>
+            </div>
           </div>
 
+        </div>
+        <span class="tittle">已选结果</span>
+        <div>
+          <el-table :data="selectedData"
+                    stripe
+                    border
+                    style="width: 100%">
+            <el-table-column prop="id"
+                             label="ID">
+
+            </el-table-column>
+            <el-table-column prop="username"
+                             label="用户账号">
+
+            </el-table-column>
+            <el-table-column prop="homeaddress"
+                             label="家庭住址"
+                             width="300px">
+
+            </el-table-column>
+            <el-table-column prop="type"
+                             label="类型">
+              <template scope="scope">
+                {{ scope.row.type==1?'管理员':'普通用户'}}
+              </template>
+            </el-table-column>
+
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+
+                <i class="el-icon-circle-plus"
+                   @click="Remove(scope.row)">删除</i>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
         <span slot="footer"
               class="dialog-footer">
@@ -245,7 +277,7 @@ export default {
   data () {
     return {
       selectedOption: 'option1',
-      dialogVisible: true,
+      dialogVisible: false,
       ruleForm: {
         pass: '',
         checkPass: '',
@@ -279,10 +311,11 @@ export default {
         currPage: 0,
         pageNum: 7
       },
-      UsersData: {
+      UsersData: []
 
-      }
-      , userstotal: 0
+
+      , userstotal: 0,
+      selectedData: []
     }
   },
   mounted () {
@@ -292,13 +325,7 @@ export default {
     }).catch((err) => {
 
     });
-    GetUserList(this.Userlist).then((result) => {
-      console.log(result);
-      thia.UsersData = result.data
-      thia.userstotal = result.total
-    }).catch((err) => {
-
-    });
+    this.getuserlist()
 
   },
   methods: {
@@ -344,6 +371,32 @@ export default {
           done();
         })
         .catch(_ => { });
+    },
+    Add (row) {
+      console.log(row.id);
+
+      this.selectedData.push(this.UsersData.find(index => index.id == row.id))
+    },
+    Remove (row) {
+      this.selectedData = this.selectedData.slice(index => index.id != row.id)
+    },
+    handleSizeChange (e) {
+      this.Userlist.pageNum = e
+      this.getuserlist()
+    },
+    handleCurrentChange (e) {
+      this.Userlist.currPage = e - 1
+      this.getuserlist()
+
+    },
+    getuserlist () {
+      GetUserList(this.Userlist).then((result) => {
+        console.log(result.data, 111);
+        this.UsersData = result.data
+        this.userstotal = result.total
+      }).catch((err) => {
+
+      });
     }
 
   }

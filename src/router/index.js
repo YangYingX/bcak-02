@@ -42,6 +42,11 @@ const routes = [
         path: '/house/editnum/:id',
         name: 'editnum',
         component: () => import('../views/EditNum.vue')
+      },
+      {
+        path: '/house/msg',
+        name: 'housemsg',
+        component: () => import('../views/HouseMsg.vue')
       }
     ]
   },
