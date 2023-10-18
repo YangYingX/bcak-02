@@ -35,15 +35,17 @@
                      @click="submit"><i class="el-icon-search"></i></el-button>
         </el-form-item>
         <el-button type="success"
-                   @click="opensubmit"><i class="el-icon-plus"></i>录入</el-button>
+                   @click="disposetable"><i class="el-icon-plus"></i>导出</el-button>
         <el-button type="primary"
                    @click="reset"><i class="el-icon-refresh-right"></i>重置</el-button>
 
       </el-form>
     </div>
-    <div> <el-table :data="tableData"
+    <div> <el-table :id="'mytable'"
+                :data="tableData"
                 stripe
-                style="width: 100%">
+                style="width: 100%"
+                @selection-change="select">
         <el-table-column type="selection"
                          width="55">
         </el-table-column>
@@ -111,6 +113,8 @@
 
 <script>
 import { GetHouseUtil, GetHouseNum, DelHouseUtil } from '../api/home'
+import XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 var dayjs = require('dayjs')
 export default {
   data () {
@@ -121,22 +125,22 @@ export default {
         pageNum: 10,
         currPage: 0
       },
+      dwtableData: [
+
+      ],
       pagetotal: 0,
       selectform: {
-        homestatus: 1,
+        homestatus: '',
         unitname: '',
-        buildnum: '',
+        c: '',
         homenum: '',
         homename: '',
         currPage: 0,
         pageNum: 10,
         token: sessionStorage.getItem('token')
       },
-      pickerOptions0: {
-        disabledDate (time) {
-          return time.getTime() > Date.now() - 8.64e6;//如果没有后面的-8.64e6就是不可以选择今天的
-        }
-      },
+      pretabledata: []
+
     }
   },
   mounted () {
@@ -207,7 +211,52 @@ export default {
     },
     show (row) {
       this.$router.push(`/house/show/${row.id}`)
+    },
+    disposetable () {
+      let res = this.pretabledata.map((item, index) => {
+        return {
+          '序号': index + 1,
+          '单元名称': item.unitname,
+          '幢号': item.buildnum,
+          '楼层号': item.storeynum,
+          '房号': item.homenum,
+          '住客姓名': item.homename,
+          '状态': item.homestatus == 1 ? '已入住' : '未入住'
+        }
+      })
+      console.log(res);
+      this.dwtableData = res
+      this.$confirm('此操作将下载一个含有已选择数据的excl表格, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.exportToExcel(this.dwtableData, '房号数据')
+        this.$message({
+          type: 'success',
+          message: '下载成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消下载'
+        });
+      });
+
+    },
+    exportToExcel (tableData, fileName) {
+
+      const worksheet = XLSX.utils.json_to_sheet(tableData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(data, fileName + '.xlsx');
+    }, select (e) {
+      console.log(e);
+      this.pretabledata = e
     }
+
   }
 }
 </script>
