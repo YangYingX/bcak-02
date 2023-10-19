@@ -50,12 +50,17 @@ const routes = [
       },
       {
         path: '/parking/parkMessage',
-        name: 'housemsg',
+        name: 'parkMessage',
         component: () => import('../views/ParkMsg.vue')
       }, {
         path: '/parking/parkpay',
-        name: 'housemsg',
+        name: 'pakpay',
         component: () => import('../views/ParkPay.vue')
+      },
+      {
+        path: 'pay/payType',
+        name: 'paytype',
+        component: () => import('../views/PayType.vue')
       }
     ]
   },
