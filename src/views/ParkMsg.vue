@@ -104,7 +104,7 @@
                          @click="openeditui(scope.row)">编辑</el-button>
               <el-button size="mini"
                          icon="el-icon-delete"
-												 @click="">移除</el-button>
+                         @click="delpark(scope.row)">移除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -290,7 +290,7 @@
 
 <script>
 import { GetParkData, GetUsersdata } from '@/api';
-import { AddParkData, EditParkData, UserParkData } from '../api/park'
+import { AddParkData, EditParkData, UserParkData, DelParkData } from '../api/park'
 export default {
   data () {
     return {
@@ -505,6 +505,16 @@ export default {
           type: 'success'
         });
         this.editVisible = false
+        this.search()
+      }).catch((err) => {
+
+      });
+    }, delpark (row) {
+      DelParkData({ id: row.id, token: sessionStorage.getItem('token') }).then((result) => {
+        this.$message({
+          message: '删除成功',
+          type: 'success'
+        });
         this.search()
       }).catch((err) => {
 

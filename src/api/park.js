@@ -23,3 +23,11 @@ export const UserParkData = (data) => {
 
 	})
 }
+export const DelParkData = (params) => {
+	return axios.request({
+		url: 'parking/delParkData',
+		method: 'get',
+		params,
+
+	})
+}
