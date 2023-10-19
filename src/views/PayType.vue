@@ -96,8 +96,9 @@
                              width="300">
               <template slot-scope="scope">
                 <el-button size="mini"
-                           @click="editnum()">编辑</el-button>
-                <el-button size="mini">查看</el-button>
+                           @click="editnum(scope.row)">编辑</el-button>
+                <el-button size="mini"
+                           @click="showcost(scope.row)">查看</el-button>
                 <el-button size="mini"
                            type="danger"
                            @click="Delete(scope.row)">删除</el-button>
@@ -113,13 +114,57 @@
           </el-pagination></div>
       </div>
     </div>
+    <el-dialog title="提示"
+               :visible.sync="editVisible"
+               width="60%">
 
+      <div>
+        <el-table ref="singleTable"
+                  :data="userdata"
+                  highlight-current-row
+                  @current-change="userdatachange"
+                  style="width: 100%">
+          <el-table-column type="index"
+                           label="序号"
+                           width="50">
+          </el-table-column>
+          <el-table-column property="username"
+                           label="用户账号"
+                           width="120">
+          </el-table-column>
+          <el-table-column property="address"
+                           label="家庭住址"
+                           width="120">
+          </el-table-column>
+          <el-table-column property="type"
+                           label="类型">
+            <template scope="scope">
+              {{ scope.row.type==1?'管理员':'普通用户' }}
+            </template>
+          </el-table-column>
+          <el-table-column property="coststatus"
+                           label="缴费状态">
+            <template scope="scope">
+              {{ scope.row.coststatus==1?'已缴费':'未缴费' }}
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="editVisible = false">取 消</el-button>
+        <el-button type="primary"
+                   @click="submituserdatachange">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { DelPay } from '../api/pay'
+import { DelPay, EditUserPay } from '../api/pay'
 import { GetCostData } from '../api/index'
+import { GetUserList } from '@/api/home';
 import XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 var dayjs = require('dayjs')
@@ -128,7 +173,7 @@ export default {
   data () {
     return {
       tableData: [],
-
+      editVisible: false,
       pagemsg: {
         pageNum: 10,
         currPage: 0
@@ -142,6 +187,11 @@ export default {
         paystatus: '',
         currPage: 0,
         pageNum: 9,
+      },
+      userlistdata: {
+        username: '',
+        currPage: 0,
+        pageNum: 7,
       },
       pagetotal: 0,
       treeData: [{
@@ -187,7 +237,17 @@ export default {
           }]
         }]
       }],
+      userdata: [],
+      usertotal: 0,
+      noticedata: {
 
+        u_id: 9,
+        c_id: 337,
+        coststatus: 2,
+        paystatus: 1,
+        username: '',
+        token: sessionStorage.getItem('token')
+      }
 
     }
 
@@ -198,6 +258,13 @@ export default {
       console.log(result);
       this.tableData = result.data
       this.pagetotal = data.total
+    }).catch((err) => {
+
+    });
+    GetUserList(this.userlistdata).then((result) => {
+      console.log(result, 'user');
+      this.userdata = result.data
+      this.usertotal = result.total
     }).catch((err) => {
 
     });
@@ -304,9 +371,51 @@ export default {
       console.log(e);
       this.pretabledata = e
     },
-		editnum(){
-			
-		}
+    editnum (row) {
+      this.editVisible = true
+      console.log(row);
+      this.noticedata.c_id = row.c_id
+      this.noticedata.paystatus = row.paystatus
+    },
+    userdatachange (e) {
+      console.log(e);
+      this.noticedata.u_id = e.id
+      this.noticedata.coststatus = e.coststatus
+      this.noticedata.username = e.username
+    },
+    submituserdatachange () {
+
+
+      this.$confirm('确定要通知该用户缴费吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+
+        EditUserPay(this.noticedata).then((result) => {
+          this.$message({
+            type: 'success',
+            message: '通知成功!'
+
+          });
+          console.log(result);
+          this.editVisible = false
+        }).catch((err) => {
+
+        });
+
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消通知'
+        });
+      });
+
+    },
+    showcost (row) {
+      this.$router.push(`/pay/showpayType/${row.id}`)
+    }
 
   },
 
