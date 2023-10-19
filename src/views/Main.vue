@@ -1,31 +1,34 @@
 <template>
-  <div>
-    <el-menu :default-active="activeIndex2"
-             class="el-menu-demo blue"
-             mode="horizontal"
-             @select="handleSelect"
-             background-color="#389af9"
-             text-color="#fff"
-             router>
-      <el-menu-item><span class="nav-tittle">小区物业管理系统</span></el-menu-item>
-      <el-menu-item index="/index"><template slot="title">首页</template></el-menu-item>
-      <el-submenu v-for="item in navdata"
-                  :key="item.id"
-                  :index="item._key">
-        <template slot="title">{{ item.title }}</template>
-        <div class="submenu-items">
-          <el-menu-item v-show="item.children"
-                        :disabled="item.id==1"
-                        v-for="item2 in item.children"
-                        :key="item2.id"
-                        background-color="#fff"
-                        class="white"
-                        :index="item2._key">{{item2.title}}</el-menu-item>
-        </div>
-      </el-submenu>
-    </el-menu>
-    <router-view></router-view>
-  </div>
+
+  <el-container>
+
+    <el-header><el-menu :default-active="activeIndex2"
+               class="el-menu-demo blue"
+               mode="horizontal"
+               @select="handleSelect"
+               background-color="#389af9"
+               text-color="#fff"
+               router>
+        <el-menu-item><span class="nav-tittle">小区物业管理系统</span></el-menu-item>
+        <el-menu-item index="/index"><template slot="title">首页</template></el-menu-item>
+        <el-submenu v-for="item in navdata"
+                    :key="item.id"
+                    :index="item._key">
+          <template slot="title">{{ item.title }}</template>
+          <div class="submenu-items">
+            <el-menu-item v-show="item.children"
+                          :disabled="item.id==1"
+                          v-for="item2 in item.children"
+                          :key="item2.id"
+                          background-color="#fff"
+                          class="white"
+                          :index="item2._key">{{item2.title}}</el-menu-item>
+          </div>
+        </el-submenu>
+      </el-menu></el-header>
+    <el-main><router-view></router-view></el-main>
+  </el-container>
+
 </template>
 
 <script>

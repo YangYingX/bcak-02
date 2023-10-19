@@ -52,6 +52,10 @@ const routes = [
         path: '/parking/parkMessage',
         name: 'housemsg',
         component: () => import('../views/ParkMsg.vue')
+      }, {
+        path: '/parking/parkpay',
+        name: 'housemsg',
+        component: () => import('../views/ParkPay.vue')
       }
     ]
   },

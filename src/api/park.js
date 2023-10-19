@@ -31,3 +31,11 @@ export const DelParkData = (params) => {
 
 	})
 }
+export const NotifyParkData = (data) => {
+	return axios.request({
+		url: 'parking/editParkOrder',
+		method: 'post',
+		data,
+
+	})
+}
