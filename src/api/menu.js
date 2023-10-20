@@ -6,4 +6,20 @@ export const GetMenuData = (params) => {
 		params,
 
 	})
+}
+export const GetLoginData = (params) => {
+	return axios.request({
+		url: 'users/getLoginData',
+		method: 'get',
+		params,
+
+	})
+}
+export const DelLoginData = (params) => {
+	return axios.request({
+		url: 'users/delLoginData',
+		method: 'get',
+		params,
+
+	})
 } 

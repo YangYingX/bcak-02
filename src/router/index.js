@@ -126,6 +126,11 @@ const routes = [
         name: 'menuSecond',
         component: () => import('../views/mentuSecond.vue')
       },
+      {
+        path: 'menu/loginlog',
+        name: 'loginlog',
+        component: () => import('../views/LoginLog.vue')
+      },
     ]
   },
   {

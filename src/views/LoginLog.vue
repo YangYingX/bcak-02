@@ -5,22 +5,37 @@
                :model="addform"
                class="demo-form-inline">
         <el-form-item>
-          <el-input v-model="addform.communityname"
-                    placeholder="请输入发布小区"></el-input>
+          <el-input v-model="pagemsg.username"
+                    placeholder="用户账号"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="addform.title"
-                    placeholder="请输入公告主题"></el-input>
+          <el-select v-model="pagemsg.type"
+                     placeholder="角色类型">
+            <el-option label="管理员"
+                       value="1"></el-option>
+            <el-option label="普通用户"
+                       value="2"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="addform.content"
-                    placeholder="请输入发布内容"></el-input>
+
+          <el-col :span="11">
+            <el-date-picker v-model="dataarea"
+                            @change="changeData"
+                            value-format="yyyy-MM-dd"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+            </el-date-picker>
+          </el-col>
+
         </el-form-item>
 
         <el-button type="success"
-                  @click="add"><i class="el-icon-plus"></i>录入</el-button>
+                   @click="add"><i class="el-icon-plus"></i>搜索</el-button>
         <el-button type="primary"
-                  @click="reset"><i class="el-icon-refresh-right"></i>重置</el-button>
+                   @click="reset"><i class="el-icon-refresh-right"></i>重置</el-button>
 
       </el-form>
     </div>
@@ -28,35 +43,37 @@
                 stripe
                 style="width: 100%">
         <el-table-column type="index"
-                        label="序号"
-                        width="50">
+                         label="序号"
+                         width="50">
         </el-table-column>
         <el-table-column prop="title"
-                         label="公告主题"
+                         username="登录账户"
                          width="180">
         </el-table-column>
-        <el-table-column prop="content"
-                         label="公告内容"
+        <el-table-column prop="type"
+                         label="角色类型"
+                         width="180">
+          <template scope="scope">
+            {{ scope.row.type === 1 ? '管理员' : '普通用户'}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="email"
+                         label="邮箱"
                          width="180">
         </el-table-column>
         <el-table-column prop="createtime"
-                         label="发布时间">
+                         label="登录时间">
           <template scope="scope">
             {{ dayjs(scope.row.createtime) }}
           </template>
         </el-table-column>
-        <el-table-column prop="communityname"
-                         label="小区名称"
-                         width="180">
-        </el-table-column>
 
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini"
-                       @click="show(scope.row)">查看</el-button>
+
             <el-button size="mini"
                        type="danger"
-                       @click="Delete(scope.row)">归档</el-button>
+                       @click="Delete(scope.row)">删除记录</el-button>
           </template>
         </el-table-column>
       </el-table></div>
@@ -67,62 +84,25 @@
                      layout="total, sizes, prev, pager, next"
                      :total="pagetotal">
       </el-pagination></div>
-    <div>
-      <el-dialog title="提示"
-                 :visible.sync="checkVisible"
-                 width="30%">
 
-        <el-form :inline="true"
-                 :model="readdata"
-                 class="demo-form-inline">
-          <el-form-item label="小区名称：">
-            <el-input v-model="readdata.communityname"
-                      placeholder="请输入发布小区"></el-input>
-          </el-form-item>
-
-          <el-form-item label="发布时间">
-            <el-date-picker v-model="readdata.createtime"
-                            type="date"
-                            placeholder="选择日期">
-            </el-date-picker>
-          </el-form-item>
-
-          <el-form-item label="公告主题">
-            <el-input v-model="readdata.title"
-                      placeholder="请输入公告主题"></el-input>
-          </el-form-item>
-          <el-form-item label="公告内容">
-            <el-input v-model="readdata.content"
-                      placeholder="请输入发布内容"></el-input>
-          </el-form-item>
-
-          <el-form-item label="公告状态">
-            <el-input v-model="readdata.content"
-                      placeholder="请输入发布内容"></el-input>
-          </el-form-item>
-
-        </el-form>
-
-        <span slot="footer"
-              class="dialog-footer">
-          <el-button type="primary"
-                     @click="checkVisible = false">关闭</el-button>
-        </span>
-      </el-dialog>
-    </div>
   </div>
 </template>
 
 <script>
+import { GetLoginData, DelLoginData } from '@/api/menu'
 
-import { GetPostMsg, AddPostMsg, DelPostMsg } from '@/api/post'
 var dayjs = require('dayjs')
 export default {
   data () {
     return {
       tableData: [],
+      dataarea: [],
       checkVisible: false,
       pagemsg: {
+        username: '',
+        type: '',
+        startDate: '',
+        endDate: '',
         pageNum: 10,
         currPage: 0
       },
@@ -140,7 +120,7 @@ export default {
     }
   },
   mounted () {
-    GetPostMsg(this.pagemsg).then((result) => {
+    GetLoginData(this.pagemsg).then((result) => {
 
       this.tableData = result.data
       this.pagetotal = result.total
@@ -149,17 +129,22 @@ export default {
     });
   },
   methods: {
+    changeData () {
+      console.log(this.dataarea);
+      this.pagemsg.startDate = this.dataarea[0]
+      this.pagemsg.endDate = this.dataarea[1]
+    },
     dayjs (e) {
       return dayjs(e).format('YYYY-MM-DD HH mm:ss')
     },
     async submit () {
-      let res = await GetPostMsg(this.pagemsg)
+      let res = await GetLoginData(this.pagemsg)
       this.tableData = res.data
       this.pagetotal = res.total
 
     },
     changepage (e) {
-      this.pagemsg.currPage = e
+      this.pagemsg.currPage = e - 1
       this.submit()
     },
     changesize (e) {
@@ -170,21 +155,23 @@ export default {
       this.$router.push('/house/unit/add')
     },
     reset () {
-      this.addform = {
-        communityname: '',
-        title: '',
-        content: '',
-        token: sessionStorage.getItem('token')
+      this.pagemsg = {
+        username: '',
+        type: '',
+        startDate: '',
+        endDate: '',
+        pageNum: 10,
+        currPage: 0
       }
     },
     Delete (row) {
 
-      this.$confirm('此操作将永久删除该公告, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        let res = await DelPostMsg({ id: row.id, token: sessionStorage.getItem('token') })
+        let res = await DelLoginData({ id: row.id, token: sessionStorage.getItem('token') })
 
         this.$message({
           type: 'success',
@@ -206,12 +193,7 @@ export default {
       this.readdata = row
     },
     add () {
-      AddPostMsg(this.addform).then((result) => {
-        console.log(result)
-        this.submit();
-      }).catch((err) => {
-
-      });
+      this.submit()
     },
   }
 }
