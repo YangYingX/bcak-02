@@ -1,6 +1,7 @@
 <template>
   <div style="display: flex; ">
     <el-card class="box-card"
+						@click
              style="background-color: rgb(32, 160, 255); width: 190px;
 						 height: 160px; text-align: center; padding-top: 20px; box-sizing: border-box;">
       <i class="el-icon-headset"
