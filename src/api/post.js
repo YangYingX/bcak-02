@@ -24,3 +24,27 @@ export const DelPostMsg = (params) => {
 
 	})
 }
+export const GetSmartData = (params) => {
+	return axios.request({
+		url: 'poster/getRepairData',
+		method: 'get',
+		params,
+
+	})
+}
+export const DelRepairData = (params) => {
+	return axios.request({
+		url: 'poster/delRepair',
+		method: 'get',
+		params,
+
+	})
+}
+export const EditRepairData = (data) => {
+	return axios.request({
+		url: 'poster/updateSmartRepair',
+		method: 'post',
+		data,
+
+	})
+}

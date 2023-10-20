@@ -90,6 +90,20 @@ const routes = [
         path: 'service/repair',
         name: 'repair',
         component: () => import('../views/Repair.vue')
+      },
+      {
+        path: 'service/smartrepair',
+        name: 'smartrepair',
+        component: () => import('../views/SmartRepair.vue')
+      }, {
+        path: 'service/houserepair',
+        name: 'houserepair',
+        component: () => import('../views/HouseRepair.vue')
+      },
+      {
+        path: 'service/feedback',
+        name: 'feedback',
+        component: () => import('../views/FeecBack.vue')
       }
     ]
   },

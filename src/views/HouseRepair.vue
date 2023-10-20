@@ -169,7 +169,7 @@ export default {
       },
       pagetotal: 0,
       selectform: {
-        repairtype: 1,
+        repairtype: 2,
         homename: '',
         resultstatus: '',
         startDate: '',
@@ -218,7 +218,7 @@ export default {
     },
     reset () {
       this.selectform = {
-        repairtype: 1,
+        repairtype: 2,
         homename: '',
         resultstatus: '',
         startDate: '',
