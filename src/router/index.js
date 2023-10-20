@@ -66,6 +66,25 @@ const routes = [
         path: 'pay/showpayType/:id',
         name: 'showpaytype',
         component: () => import('../views/ShowPayType.vue')
+      }, {
+        path: 'pay/addpaytype',
+        name: 'addpaytype',
+        component: () => import('../views/AddCostItem.vue')
+      },
+      {
+        path: 'pay/payMessage',
+        name: 'payMessage',
+        component: () => import('../views/PayMsg.vue')
+      },
+      {
+        path: 'pay/showpaymsg/:id',
+        name: 'showpaymsg',
+        component: () => import('../views/ShowPayMsg.vue')
+      },
+      {
+        path: 'service/postMessage',
+        name: 'showpaymsg',
+        component: () => import('../views/ShowPayMsg.vue')
       }
     ]
   },

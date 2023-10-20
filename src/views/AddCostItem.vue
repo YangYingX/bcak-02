@@ -1,37 +1,60 @@
 <template>
+
   <div class="main">
     <div>
       <el-form :inline="true"
                :model="selectform"
                class="demo-form-inline">
-        <div class="inputs"><el-form-item label="小区名称"
-                        label-width="100px">
-            <el-input v-model="selectform.communityname"
-                      placeholder="小区名称"
+        <div class="inputs">
+          <el-form-item label="计费项目名称"
+                        label-width="140px">
+            <el-input v-model="selectform.payname"
                       minlength="500px"></el-input>
           </el-form-item>
-          <el-form-item label="单元名称"
-                        label-width="100px">
-            <el-input v-model="selectform.unitname"
-                      placeholder="单元名称"
+          <el-form-item label="项目优先级"
+                        label-width="140px">
+            <el-input v-model="selectform.paylevel"
                       minlength="500px"></el-input>
           </el-form-item>
-          <el-form-item label="  栋数 "
-                        label-width="100px">
-            <el-input v-model="selectform.unitnum"
-                      placeholder="栋数"
+          <el-form-item label="项目用量/时长"
+                        label-width="140px">
+            <el-input v-model="selectform.paynum"
+                      minlength="500px"></el-input>
+          </el-form-item>
+          <el-form-item label="项目价格"
+                        label-width="140px">
+            <el-input v-model="selectform.paymoney"
                       minlength="500px"></el-input>
           </el-form-item>
 
-          <el-form-item label="建成状态"
-                        label-width="100px">
-            <el-select v-model="selectform.unitstatus"
-                       placeholder="建成状态"
+          <el-form-item label="通知状态"
+                        label-width="140px">
+            <el-select v-model="selectform.paystatus"
+                       placeholder="通知状态"
                        minlength="500px">
-              <el-option label="已建成"
+              <el-option label="已通知"
                          value="1"></el-option>
-              <el-option label="未建成"
+              <el-option label="未通知"
                          value="2"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="计费目录"
+                        label-width="100px">
+            <el-select v-model="selectform.c_id"
+                       placeholder="请选择计费项目"
+                       minlength="500px">
+              <el-option label="电费目录"
+                         value="7"></el-option>
+              <el-option label="水费固定月目录"
+                         value="8"></el-option>
+              <el-option label="水费按量目录"
+                         value="9"></el-option>
+              <el-option label="天然气目录"
+                         value="10"></el-option>
+              <el-option label="物业费目录"
+                         value="11"></el-option>
+              <el-option label="宽带费目录"
+                         value="12"></el-option>
             </el-select>
           </el-form-item>
         </div>
@@ -46,7 +69,7 @@
     </div>
     <div>
       <Editor id="tinymce"
-              v-model="selectform.unitcontext"
+              v-model="selectform.paycontent"
               :init="init"></Editor>
     </div>
   </div>
@@ -55,7 +78,7 @@
 <script>
 import tinymce from "tinymce";
 import Editor from "@tinymce/tinymce-vue"; import 'tinymce/themes/silver/theme';
-import { PostHouseUtil, ShowHouseUtil, EditHouseUtil } from '../api/home'
+import { AddCost } from "@/api/pay";
 export default {
   components: { Editor },
   data () {
@@ -85,30 +108,22 @@ export default {
       },
       u_id: 0,
       selectform: {
-        communityname: "",
-        unitname: "",
-        unitnum: "",
-        unitstatus: '',
-        unitcontext: "",
+        payname: '',
+        paylevel: '',
+        paynum: '',
+        paymoney: '',
+        paystatus: '',
+        c_id: '',
+        paycontent: '',
+        coststatus: 2,
         token: sessionStorage.getItem('token')
       },
     };
 
   }, mounted () {
     tinymce.init({});
-    if (this.$route.params.id) {
-      ShowHouseUtil({ id: this.$route.params.id, token: sessionStorage.getItem('token') }).then((result) => {
 
-        let { communityname, unitname, unitnum, unitstatus, unitcontext } = result[0]
-        this.selectform.communityname = communityname
-        this.selectform.unitname = unitname
-        this.selectform.unitnum = unitnum
-        this.selectform.unitstatus = unitstatus
-        this.selectform.unitcontext = unitcontext
-      }).catch((err) => {
 
-      });
-    }
   },
   methods: {
     Submit () {
@@ -118,40 +133,32 @@ export default {
         type: 'warning'
       }).then(async () => {
 
-        if (this.$route.params.id) {
-          let res = await EditHouseUtil({ u_id: this.$route.params.id, ...this.selectform })
 
-          this.$message({
-            type: 'success',
-            message: '修改成功!'
-          });
-          this.$router.push('/house/unit')
-        } else {
-          let res = await PostHouseUtil(this.selectform)
+        let res = await AddCost(this.selectform)
 
-          this.$message({
-            message: '提交成功',
-            type: 'success'
-          });
-          this.$router.push('/house/unit')
-        }
+        this.$message({
+          message: '提交成功',
+          type: 'success'
+        });
+        this.$router.push('/pay/paytype')
+
 
 
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: '已取消提交'
         });
       });
     },
     back () {
-      this.$router.push('/house/unit')
+      this.$router.push('/pay/paytype')
     }
   }
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 .inputs {
   display: grid;
   grid-template-columns: 1fr 1fr;
