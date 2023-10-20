@@ -83,8 +83,13 @@ const routes = [
       },
       {
         path: 'service/postMessage',
-        name: 'showpaymsg',
-        component: () => import('../views/ShowPayMsg.vue')
+        name: 'postMessage',
+        component: () => import('../views/PostMsg.vue')
+      },
+      {
+        path: 'service/repair',
+        name: 'repair',
+        component: () => import('../views/Repair.vue')
       }
     ]
   },
