@@ -117,7 +117,15 @@ const routes = [
         path: 'user/Message',
         name: 'adminMessage',
         component: () => import('../views/AllUserMessage.vue')
-      }
+      }, {
+        path: 'menu/menuData',
+        name: 'menuData',
+        component: () => import('../views/menuData.vue')
+      }, {
+        path: 'menu/muenSecond/:id',
+        name: 'menuSecond',
+        component: () => import('../views/mentuSecond.vue')
+      },
     ]
   },
   {

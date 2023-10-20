@@ -1,6 +1,6 @@
 <template>
   <div class="doc">
-
+    <p @click="back">返回</p>
     <div> <el-table :data="tableData"
                 stripe
                 style="width: 100%">
@@ -22,13 +22,6 @@
                          label="菜单描述">
         </el-table-column>
 
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button size="mini"
-                       @click="show(scope.row)">查看下一级</el-button>
-
-          </template>
-        </el-table-column>
       </el-table></div>
     <div class="page"><el-pagination @size-change="changesize"
                      @current-change="changepage"
@@ -51,7 +44,7 @@ export default {
       tableData: [],
       checkVisible: false,
       pagemsg: {
-        prentId: 0,
+        prentId: this.$route.params.id,
         pageNum: 10,
         currPage: 0
       },
@@ -104,12 +97,10 @@ export default {
         token: sessionStorage.getItem('token')
       }
     },
+    back () {
+      this.$router.go(-1);
+    }
 
-
-    show (row) {
-      this.$router.push(`/menu/muenSecond/${row.id}`)
-    },
-		
   }
 }
 </script>
