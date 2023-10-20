@@ -61,7 +61,11 @@
         </el-table-column>
         <el-table-column prop="email"
                          label="邮箱">
-
+        </el-table-column>
+        <el-table-column label="创建时间">
+          <template scope="scope">
+            {{dayjs( scope.row.createtime)}}
+          </template>
         </el-table-column>
         <el-table-column prop="note"
                          label="描述">
@@ -137,6 +141,25 @@
                       placeholder="家庭住址"
                       :readonly="readonly"></el-input>
           </el-form-item>
+
+          <el-form-item label="车位名称">
+            <el-input v-model="readdata.parkname"
+                      placeholder="车位名称"
+                      :readonly="readonly"></el-input>
+          </el-form-item>
+          <el-form-item label="车位状态">
+
+            <el-switch v-model="readdata.parkstatus"
+                       active-text="已有车"
+                       inactive-text="未停车"
+                       active-color="#13ce66"
+                       inactive-color="#ff4949"
+                       active-value="1"
+                       inactive-value="2"
+                       :disabled="readonly">
+            </el-switch>
+
+          </el-form-item>
           <el-form-item label="邮箱">
             <el-input v-model="readdata.email"
                       placeholder="邮箱"
@@ -208,6 +231,25 @@
                       placeholder="家庭住址"
                       :readonly="readonly"></el-input>
           </el-form-item>
+
+          <el-form-item label="车位名称">
+            <el-input v-model="addform.parkname"
+                      placeholder="车位名称"
+                      :readonly="readonly"></el-input>
+          </el-form-item>
+          <el-form-item label="车位状态">
+
+            <el-switch v-model="addform.parkstatus"
+                       active-text="已有车"
+                       inactive-text="未停车"
+                       active-color="#13ce66"
+                       inactive-color="#ff4949"
+                       active-value="1"
+                       inactive-value="2"
+                       :disabled="readonly">
+            </el-switch>
+
+          </el-form-item>
           <el-form-item label="邮箱">
             <el-input v-model="addform.email"
                       placeholder="邮箱"
@@ -258,7 +300,8 @@ export default {
         nickname: '',
         sex: '',
         homeaddress: '',
-
+        parkname: '',
+        parkstatus: '',
         email: '',
         note: '',
       },
@@ -272,7 +315,8 @@ export default {
         token: sessionStorage.getItem('token')
       },
       addform: {
-
+        parkname: '',
+        parkstatus: '',
         inputText: '',
         CharType: '',
         pageNum: 10,
@@ -386,6 +430,7 @@ export default {
           message: '编辑成功!'
 
         });
+        this.checkVisible = false
       }).catch((err) => {
 
       });
