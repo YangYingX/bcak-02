@@ -100,19 +100,19 @@
 			{
 				"id": "6-1",
 				"title": "普通用户信息",
-				"_key": "/user/404",
+				"_key": "/user/userMessage",
 				"prentID": "6"
 			},
 			{
 				"id": "6-2",
 				"title": "管理员信息",
-				"_key": "/user/404",
+				"_key": "/user/adminMessage",
 				"prentID": "6"
 			},
 			{
 				"id": "6-3",
 				"title": "用户总表查询",
-				"_key": "/user/404",
+				"_key": "/user/Message",
 				"prentID": "6"
 			}
 		]

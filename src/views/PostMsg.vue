@@ -18,9 +18,9 @@
         </el-form-item>
 
         <el-button type="success"
-                   @click="add"><i class="el-icon-plus"></i>录入</el-button>
+                  @click="add"><i class="el-icon-plus"></i>录入</el-button>
         <el-button type="primary"
-                   @click="reset"><i class="el-icon-refresh-right"></i>重置</el-button>
+                  @click="reset"><i class="el-icon-refresh-right"></i>重置</el-button>
 
       </el-form>
     </div>
@@ -28,8 +28,8 @@
                 stripe
                 style="width: 100%">
         <el-table-column type="index"
-                         label="序号"
-                         width="50">
+                        label="序号"
+                        width="50">
         </el-table-column>
         <el-table-column prop="title"
                          label="公告主题"

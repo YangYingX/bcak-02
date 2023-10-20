@@ -236,8 +236,8 @@
 </template>
 
 <script>
-
-import { GetUsersByTypePage, Updata, GetUsersByTypeChar, AddUserdata } from '@/api/user'
+import { GetUsersdata } from '@/api/index'
+import { GetUsersByTypePage, Updata, GetUsersByTypeChar, DelUserdata, AddUserdata } from '@/api/user'
 var dayjs = require('dayjs')
 export default {
   data () {
@@ -247,7 +247,7 @@ export default {
       addVisible: false,
       readonly: false,
       pagemsg: {
-        type: 2,
+
         pageNum: 10,
         currPage: 0
       },
@@ -258,13 +258,13 @@ export default {
         nickname: '',
         sex: '',
         homeaddress: '',
-        type: 2,
+
         email: '',
         note: '',
       },
       pagetotal: 0,
       selectform: {
-        type: 2,
+
         inputText: '',
         CharType: '',
         pageNum: 10,
@@ -272,7 +272,7 @@ export default {
         token: sessionStorage.getItem('token')
       },
       addform: {
-        type: 2,
+
         inputText: '',
         CharType: '',
         pageNum: 10,
@@ -287,7 +287,7 @@ export default {
     }
   },
   mounted () {
-    GetUsersByTypePage(this.pagemsg).then((result) => {
+    GetUsersdata(this.pagemsg).then((result) => {
 
       this.tableData = result.data
       this.pagetotal = result.total
@@ -300,7 +300,7 @@ export default {
       return dayjs(e).format('YYYY-MM-DD HH mm:ss')
     },
     change () {
-      GetUsersByTypePage(this.pagemsg).then((result) => {
+      GetUsersdata(this.pagemsg).then((result) => {
 
         this.tableData = result.data
         this.pagetotal = result.total
@@ -325,7 +325,7 @@ export default {
     },
     reset () {
       this.selectform = {
-        type: 2,
+
         inputText: '',
         CharType: '',
         pageNum: 10,
@@ -407,7 +407,7 @@ export default {
     },
     reset () {
       this.addform = {
-        type: 2,
+
         inputText: '',
         CharType: '',
         pageNum: 10,

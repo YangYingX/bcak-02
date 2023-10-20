@@ -247,7 +247,7 @@ export default {
       addVisible: false,
       readonly: false,
       pagemsg: {
-        type: 2,
+        type: 1,
         pageNum: 10,
         currPage: 0
       },
@@ -258,13 +258,13 @@ export default {
         nickname: '',
         sex: '',
         homeaddress: '',
-        type: 2,
+        type: 1,
         email: '',
         note: '',
       },
       pagetotal: 0,
       selectform: {
-        type: 2,
+        type: 1,
         inputText: '',
         CharType: '',
         pageNum: 10,
@@ -272,7 +272,7 @@ export default {
         token: sessionStorage.getItem('token')
       },
       addform: {
-        type: 2,
+        type: 1,
         inputText: '',
         CharType: '',
         pageNum: 10,
@@ -325,7 +325,7 @@ export default {
     },
     reset () {
       this.selectform = {
-        type: 2,
+        type: 1,
         inputText: '',
         CharType: '',
         pageNum: 10,
@@ -407,7 +407,7 @@ export default {
     },
     reset () {
       this.addform = {
-        type: 2,
+        type: 1,
         inputText: '',
         CharType: '',
         pageNum: 10,

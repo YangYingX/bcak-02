@@ -104,6 +104,19 @@ const routes = [
         path: 'service/feedback',
         name: 'feedback',
         component: () => import('../views/FeedBack.vue')
+      }, {
+        path: 'user/userMessage',
+        name: 'userMessage',
+        component: () => import('../views/UserMessage.vue')
+      }, {
+        path: 'user/adminMessage',
+        name: 'adminMessage',
+        component: () => import('../views/AdminMessage.vue')
+      },
+      {
+        path: 'user/Message',
+        name: 'adminMessage',
+        component: () => import('../views/AllUserMessage.vue')
       }
     ]
   },
