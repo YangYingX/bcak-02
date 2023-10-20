@@ -40,3 +40,10 @@ export const AddUserdata = (data) => {
 
 	})
 }
+export const AGetUsersdata = (params) => {
+	return axios.request({
+		url: 'admin/getUserData',
+		method: 'get',
+		params
+	})
+}

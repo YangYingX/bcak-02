@@ -6,26 +6,34 @@
                class="demo-form-inline">
 
         <el-form-item>
-          <el-select v-model="selectform.CharType"
+          <el-select v-model="pagemsg.value"
                      placeholder="请选择查询类型">
-            <el-option label="用户名"
-                       value="username"></el-option>
-            <el-option label="昵称"
-                       value="nickname"></el-option>
-            <el-option label="家庭地址"
-                       value="homeaddress"></el-option>
-            <el-option label="性别"
-                       value="sex"></el-option>
-            <el-option label="邮箱"
-                       value="email"></el-option>
+            <el-option label="管理员"
+                       value="1"></el-option>
+            <el-option label="普通用户"
+                       value="2"></el-option>
+
           </el-select>
         </el-form-item>
 
         <el-form-item>
-          <el-input v-model="selectform.inputText"
+          <el-input v-model="pagemsg.inputText"
                     placeholder="请输入查询内容"></el-input>
         </el-form-item>
+        <el-form-item>
 
+          <el-col :span="11">
+            <el-date-picker v-model="dataarea"
+                            @change="changeData"
+                            value-format="yyyy-MM-dd"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+            </el-date-picker>
+          </el-col>
+
+        </el-form-item>
         <el-form-item>
           <el-button type="primary"
                      @click="submit"><i class="el-icon-search"></i></el-button>
@@ -279,7 +287,7 @@
 
 <script>
 import { GetUsersdata } from '@/api/index'
-import { GetUsersByTypePage, Updata, GetUsersByTypeChar, DelUserdata, AddUserdata } from '@/api/user'
+import { AGetUsersdata, Updata, GetUsersByTypeChar, DelUserdata, AddUserdata } from '@/api/user'
 var dayjs = require('dayjs')
 export default {
   data () {
@@ -289,10 +297,15 @@ export default {
       addVisible: false,
       readonly: false,
       pagemsg: {
-
+        inputText: '',
+        value: '',
+        startDate: '',
+        endDate: '',
         pageNum: 10,
-        currPage: 0
+        currPage: 0,
+        token: sessionStorage.getItem('token')
       },
+      dataarea: [],
       readdata: {
         u_id: 9,
         username: '',
@@ -328,6 +341,11 @@ export default {
           return time.getTime() > Date.now() - 8.64e6;//如果没有后面的-8.64e6就是不可以选择今天的
         }
       },
+      changeData () {
+        console.log(this.dataarea);
+        this.pagemsg.startDate = this.dataarea[0]
+        this.pagemsg.endDate = this.dataarea[1]
+      },
     }
   },
   mounted () {
@@ -353,7 +371,7 @@ export default {
       });
     },
     async submit () {
-      let res = await GetUsersByTypeChar(this.selectform)
+      let res = await AGetUsersdata(this.pagemsg)
 
       this.tableData = res.data
       this.pagetotal = res.total

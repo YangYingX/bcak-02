@@ -77,7 +77,7 @@
           </template>
         </el-table-column>
       </el-table></div>
-    <div class="page"><el-pagination @size-change="changesize"
+    <div class="page"><el-pagination @size-change="changesize" [],
                      @current-change="changepage"
                      :page-sizes="[10, 20, 30, 40]"
                      :page-size="this.addform.pageNum"

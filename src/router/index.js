@@ -131,6 +131,11 @@ const routes = [
         name: 'loginlog',
         component: () => import('../views/LoginLog.vue')
       },
+      {
+        path: 'personal/message',
+        name: 'message',
+        component: () => import('../views/Mymessage.vue')
+      },
     ]
   },
   {
