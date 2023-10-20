@@ -48,3 +48,11 @@ export const EditRepairData = (data) => {
 
 	})
 }
+export const GetFeedBack = (params) => {
+	return axios.request({
+		url: 'poster/getFeedBack',
+		method: 'get',
+		params,
+
+	})
+}

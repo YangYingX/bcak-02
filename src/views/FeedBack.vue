@@ -4,31 +4,36 @@
       <el-form :inline="true"
                :model="selectform"
                class="demo-form-inline">
+
         <el-form-item>
-          <el-select v-model="selectform.homestatus"
-                     placeholder="入住状态">
-            <el-option label="入住"
-                       value="1"></el-option>
-            <el-option label="未入住"
-                       value="2"></el-option>
-          </el-select>
+          <el-input v-model="selectform.username"
+                    placeholder="反馈人"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="selectform.unitname"
-                    placeholder="单元名称"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-input v-model="selectform.buildnum"
-                    placeholder="幢号"></el-input>
+          <el-input v-model="selectform.feedtext"
+                    placeholder="反馈内容"></el-input>
         </el-form-item>
 
         <el-form-item>
-          <el-input v-model="selectform.homenum"
-                    placeholder="房号"></el-input>
+          <el-date-picker v-model="selectform.feedtext"
+                          type="daterange"
+                          range-separator="至"
+                          start-placeholder="开始日期"
+                          end-placeholder="结束日期">
+          </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="selectform.homename"
-                    placeholder="住客姓名"></el-input>
+          <el-input v-model="selectform.feedresult"
+                    placeholder="反馈回复"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-select v-model="selectform.feedstatus"
+                     placeholder="反馈状态">
+            <el-option label="已反馈"
+                       value="1"></el-option>
+            <el-option label="未反馈"
+                       value="2"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary"
@@ -114,7 +119,8 @@
 </template>
 
 <script>
-import { GetHouseUtil, GetHouseNum, DelHouseUtil, DelHouses } from '../api/home'
+import { DelHouseUtil, DelHouses } from '../api/home'
+import { GetFeedBack } from '@/api/post';
 import XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 var dayjs = require('dayjs')
@@ -132,21 +138,22 @@ export default {
       ],
       pagetotal: 0,
       selectform: {
-        homestatus: '',
-        unitname: '',
-        buildnum: '',
-        homenum: '',
-        homename: '',
+        username: '',
+        feedtext: '',
+        startDate: '',
+        endDate: '',
+        feedresult: '',
+        feedstatus: '',
         currPage: 0,
         pageNum: 10,
-        token: sessionStorage.getItem('token')
+
       },
       pretabledata: []
 
     }
   },
   mounted () {
-    GetHouseUtil(this.pagemsg).then((result) => {
+    GetFeedBack(this.selectform).then((result) => {
 
       this.tableData = result.data
       this.pagetotal = result.total
@@ -159,7 +166,7 @@ export default {
       return dayjs(e).format('YYYY-MM-DD HH mm:ss')
     },
     async submit () {
-      let res = await GetHouseNum(this.selectform)
+      let res = await GetFeedBack(this.selectform)
       this.tableData = res.data
       this.pagetotal = res.total
 
@@ -177,14 +184,14 @@ export default {
     },
     reset () {
       this.selectform = {
-        homestatus: '',
-        unitname: '',
-        buildnum: '',
-        homenum: '',
-        homename: '',
+        username: '',
+        feedtext: '',
+        startDate: '',
+        endDate: '',
+        feedresult: '',
+        feedstatus: '',
         currPage: 0,
         pageNum: 10,
-        token: sessionStorage.getItem('token')
       }
     },
     Delete (row) {

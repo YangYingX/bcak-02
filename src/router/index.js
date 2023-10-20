@@ -103,7 +103,7 @@ const routes = [
       {
         path: 'service/feedback',
         name: 'feedback',
-        component: () => import('../views/FeecBack.vue')
+        component: () => import('../views/FeedBack.vue')
       }
     ]
   },
