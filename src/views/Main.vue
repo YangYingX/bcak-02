@@ -2,7 +2,8 @@
 
   <el-container>
 
-    <el-header><el-menu :default-active="activeIndex2"
+    <el-header>
+      <el-menu :default-active="activeIndex2"
                class="el-menu-demo blue"
                mode="horizontal"
                @select="handleSelect"
@@ -25,7 +26,8 @@
                           :index="item2._key">{{item2.title}}</el-menu-item>
           </div>
         </el-submenu>
-      </el-menu></el-header>
+      </el-menu>
+      </el-header>
     <el-main><router-view></router-view></el-main>
   </el-container>
 

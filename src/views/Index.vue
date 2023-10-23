@@ -306,7 +306,7 @@ export default {
         currPage: 0,
         pageNum: 4
       },
-      tabletype: ['', '已修复', '待处理']
+      tabletype: ['待处理', '已修复', '']
     }
 
   },
@@ -426,7 +426,7 @@ export default {
     },
     async getrepairdata () {
       let res = await GetRepairData(this.tableparams)
-   
+
       this.tableData = res.data
     }
   }

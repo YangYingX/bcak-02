@@ -2,7 +2,7 @@ import axios from "axios";
 
 const instance = axios.create({
 	baseURL: 'http://community.byesame.com',
-	timeout: 6000,
+	timeout: 60000,
 	headers: { 'X-Custom-Header': 'foobar' }
 });
 instance.interceptors.request.use((config) => {
