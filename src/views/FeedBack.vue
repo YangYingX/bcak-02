@@ -261,7 +261,8 @@ export default {
       const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
       const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       saveAs(data, fileName + '.xlsx');
-    }, select (e) {
+    },
+     select (e) {
       console.log(e);
       this.pretabledata = e
     },
